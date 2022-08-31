@@ -42,13 +42,14 @@ Nesse projeto, você devera desenvolver uma aplicação consumindo uma Api exter
 - Persistência do estado da página utilizando query params
 - Utilização de módulos namespaced no vuex
 - Compatibilidade cross device e cross plataform
-- Deploy da apluicaçao em serviços como Netlify ou Aws amplify
+- Deploy da aplicaçao em serviços como Netlify ou Aws amplify
 
 ### Milestones
 1. Fazer um Fork do projeto para desenvolvimto local
 2. Criar serviços para isolar a camada de comunicaçao com a API utilizando a lib Axios
 3. Adicionar a Biblioteca Vuetify e utlizar seus components
 4. Criar a rota /usuários para listar o retorno da API
+5. Utilizar o Vuex para gerenciar os estados da aplicação
 5. Criar componentes para CRUD actions (editar e excluir)
 
 ### Algumas considerações
