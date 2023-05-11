@@ -45,7 +45,7 @@ Nesse projeto, você devera desenvolver uma aplicação consumindo uma Api exter
 - Deploy da aplicaçao em serviços como Netlify ou Aws amplify
 
 ### Milestones
-1. Fazer um Fork do projeto para desenvolvimto local
+1. Fazer um Fork do projeto para desenvolvimento local
 2. Criar serviços para isolar a camada de comunicaçao com a API utilizando a lib Axios
 3. Adicionar a Biblioteca Vuetify e utlizar seus components
 4. Criar a rota /usuários para listar o retorno da API
