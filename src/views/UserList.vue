@@ -29,7 +29,7 @@
             <v-toolbar-title>Lista de Usuários</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn color="primary" dark class="mb-2" @click="openModalUser()">
-              New Item
+              Novo Usuário
             </v-btn>
           </v-toolbar>
         </template>
@@ -49,7 +49,10 @@
               <td>{{ user.title }} {{ user.firstName }} {{ user.lastName }}</td>
 
               <td>
-                <v-icon large color="green darken-2"> mdi-domain </v-icon>
+                <v-icon small class="mr-2" @click="editUser(user)">
+                  mdi-pencil
+                </v-icon>
+                <v-icon small @click="deleteUser(user)"> mdi-delete </v-icon>
               </td>
             </tr>
           </tbody>
@@ -114,12 +117,14 @@ export default {
     editUser(user) {
       this.selectedUser = user;
       console.log(`Editando usuário: ${user.name}`);
+      this.openModalUser()
     },
-    deleteUser(userId) {
-      const confirmed = confirm("Tem certeza que deseja excluir este usuário?");
-      if (confirmed) {
-        this.users = this.users.filter((user) => user.id !== userId);
-      }
+    deleteUser(user) {
+      console.log('deletar  - ',user)
+      // const confirmed = confirm("Tem certeza que deseja excluir este usuário?");
+      // if (confirmed) {
+      //   this.users = this.users.filter((user) => user.id !== userId);
+      // }
     },
   },
 };
