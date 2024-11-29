@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" max-width="500">
     <v-card>
       <v-card-title>
-        <span class="text-h5">Adicionar Novo Usuário</span>
+        <span class="text-h5">{{
+          userData.id ? "Editar Usuário" : "Adicionar Novo Usuário"
+        }}</span>
       </v-card-title>
 
       <v-card-text>
@@ -33,7 +35,9 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" text @click="saveUser"> Salvar </v-btn>
+        <v-btn color="green darken-1" text @click="saveUser">
+          {{ userData.id ? "Salvar Alterações" : "Salvar" }}
+        </v-btn>
         <v-btn color="red darken-1" text @click="closeModal"> Cancelar </v-btn>
       </v-card-actions>
     </v-card>
@@ -42,14 +46,16 @@
 
 <script>
 export default {
-  name: "modal-add-user",
+  name: "modal-user",
   props: {
     show: { type: Boolean, required: true },
+    user: { type: Object, default: () => null },
   },
   data() {
     return {
       dialog: this.show,
       userData: {
+        id: "",
         firstName: "",
         lastName: "",
         title: "",
@@ -64,6 +70,13 @@ export default {
     dialog(val) {
       if (!val) this.closeModal();
     },
+    user(val) {
+      if (val) {
+        this.userData = { ...val };
+      } else {
+        this.resetForm();
+      }
+    },
   },
   methods: {
     closeModal() {
@@ -72,6 +85,15 @@ export default {
     saveUser() {
       this.$emit("save", this.userData);
       this.closeModal();
+    },
+    resetForm() {
+      this.userData = {
+        id: "",
+        firstName: "",
+        lastName: "",
+        title: "",
+        picture: "",
+      };
     },
   },
 };

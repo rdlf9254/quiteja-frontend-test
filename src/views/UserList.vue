@@ -1,11 +1,11 @@
 <template>
   <div>
-    <modal-add-user
-      :show="showModalAdd"
+    <modal-user
+      :show="showModalUser"
+      :user="selectedUser"
       @save="addNewUser"
       @close="closeModals"
-    ></modal-add-user>
-    <!-- <modal-edit-user :show="showModalAdd" @save="addNewUser"></modal-edit-user> -->
+    ></modal-user>
 
     <v-container>
       <v-data-table
@@ -18,7 +18,7 @@
           <v-toolbar flat>
             <v-toolbar-title>Lista de Usuários</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="showAddModal()">
+            <v-btn color="primary" dark class="mb-2" @click="openModalUser()">
               New Item
             </v-btn>
           </v-toolbar>
@@ -46,16 +46,14 @@
 </template>
 
 <script>
-import ModalAddUser from "@/components/modals/ModalAddUser.vue";
-// import ModalEditUser from "@/components/modals/modalEditUser.vue";
+import ModalUser from "@/components/modals/ModalUser.vue";
 
 import { getUsers } from "@/services/user.js";
 
 export default {
   name: "UserList",
   components: {
-    ModalAddUser,
-    // ModalEditUser,
+    ModalUser,
   },
   data() {
     return {
@@ -65,8 +63,8 @@ export default {
         { text: "Nome", value: "firstName" },
         { text: "Ações", value: "Actions", sortable: false },
       ],
-      showModalAdd: false,
-      showModalEdit: false,
+      selectedUser: null,
+      showModalUser: false,
     };
   },
   mounted() {
@@ -79,15 +77,12 @@ export default {
       });
   },
   methods: {
-    showAddModal() {
-      this.showModalAdd = true;
-    },
-    showEditModal() {
-      this.showModalEdit = true;
+    openModalUser() {
+      this.showModalUser = true;
     },
     closeModals() {
-      this.showModalAdd = false;
-      this.showModalEdit = false;
+      this.showModalUser = false;
+      this.selectedUser = null;
     },
     addNewUser(newUser) {
       // this.users.push(newUser);
@@ -99,6 +94,7 @@ export default {
       );
     },
     editUser(user) {
+      this.selectedUser = user
       console.log(`Editando usuário: ${user.name}`);
     },
     deleteUser(userId) {
