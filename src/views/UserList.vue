@@ -30,7 +30,13 @@
           <v-toolbar flat>
             <v-toolbar-title>Lista de Usuários</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="openModalUser()">
+            <v-btn
+              color="primary"
+              dark
+              class="mb-2"
+              @click="openModalUser()"
+              :disabled="loading"
+            >
               <v-icon>mdi-plus</v-icon>
               Novo Usuário
             </v-btn>
@@ -51,8 +57,8 @@
 
               <td>{{ user.title }} {{ user.firstName }} {{ user.lastName }}</td>
 
-              <td>
-                <v-icon small class="mr-2" @click="editUser(user)">
+              <td class="td-actions">
+                <v-icon small class="mr-2" @click="openEditUser(user)">
                   mdi-pencil
                 </v-icon>
                 <v-icon small @click="openDeleteUser(user)">
@@ -72,7 +78,13 @@
 import ModalUser from "@/components/modals/ModalUser.vue";
 import ModalConfirmDelete from "@/components/modals/ModalConfirmDelete.vue";
 
-import { getUsers } from "@/services/user.js";
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "@/services/user.js";
 
 export default {
   name: "UserList",
@@ -89,6 +101,7 @@ export default {
         { text: "Ações", value: "Actions", sortable: false },
       ],
       selectedUser: null,
+      selectedId: null,
       showModalUser: false,
       showModalConfirm: false,
       loading: false,
@@ -115,20 +128,63 @@ export default {
     addNewUser(newUser) {
       console.log("Usuário adicionado:", newUser);
     },
-    viewInfo(user) {
-      console.log(
-        `ver info de usuário:\nNome: ${user.name}\nTítulo: ${user.title}`
-      );
-    },
-    editUser(user) {
-      this.selectedUser = user;
-      console.log(`Editando usuário: ${user.name}`);
+    // viewInfo(user) {
+    //   console.log(
+    //     `ver info de usuário:\nNome: ${user.name}\nTítulo: ${user.title}`
+    //   );
+    // },
+    openEditUser(user) {
+      this.selectedId = user.id;
+      this.loading = true;
+
+      getUserById(this.selectedIdid)
+        .then((result) => {
+          this.selectedUser = result.data;
+          console.log(`Editando usuário: ${this.selectedUser}`);
+        })
+        .catch((e) => {
+          console.error("erro ", e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
       this.openModalUser();
+    },
+    editUser(){
+      this.loading = true;
+
+      updateUser(this.selectedId)
+        .then((result) => {
+          // this.selectedUser = result.data;
+          console.log(`Editando usuário: ${this.selectedUser}`);
+        })
+        .catch((e) => {
+          console.error("erro ", e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+
     },
     openDeleteUser(user) {
       console.log("deletar  - ", user);
-      this.selectedUser = user;
+      this.selectedId = user.id;
       this.showModalConfirm = true;
+    },
+    deleteSelectedUser() {
+      this.loading = true;
+
+      deleteUser(this.selectedId)
+        .then((result) => {
+          // this.selectedUser = result.data;
+          console.log(`delete usuário: ${this.selectedUser}`);
+        })
+        .catch((e) => {
+          console.error("erro ", e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };
