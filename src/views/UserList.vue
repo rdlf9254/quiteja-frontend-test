@@ -23,6 +23,14 @@
         class="elevation-1"
         :loading="loading"
         loading-text="Carregando..."
+        :footer-props="{
+          showFirstLastPage: true,
+          firstIcon: 'mdi-arrow-collapse-left',
+          lastIcon: 'mdi-arrow-collapse-right',
+          prevIcon: 'mdi-minus',
+          nextIcon: 'mdi-plus',
+          'items-per-page-text': 'Usuários por página',
+        }"
       >
         <template v-slot:top>
           <v-toolbar flat>
@@ -117,10 +125,10 @@ export default {
     editUser(user) {
       this.selectedUser = user;
       console.log(`Editando usuário: ${user.name}`);
-      this.openModalUser()
+      this.openModalUser();
     },
     deleteUser(user) {
-      console.log('deletar  - ',user)
+      console.log("deletar  - ", user);
       // const confirmed = confirm("Tem certeza que deseja excluir este usuário?");
       // if (confirmed) {
       //   this.users = this.users.filter((user) => user.id !== userId);
