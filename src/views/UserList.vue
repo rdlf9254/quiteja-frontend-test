@@ -4,15 +4,14 @@
       :show="showModalUser"
       :user="selectedUser"
       @save="addNewUser"
-      @close="closeModals"
+      @close="closeModals()"
     ></modal-user>
 
     <modal-confirm-delete
       :show="showModalConfirm"
       message="Tem certeza que deseja excluir o usuário?"
       :user="selectedUser"
-      @save="addNewUser"
-      @close="closeModals"
+      @close="closeModals()"
     ></modal-confirm-delete>
 
     <v-container>
@@ -24,11 +23,6 @@
         :loading="loading"
         loading-text="Carregando..."
         :footer-props="{
-          showFirstLastPage: true,
-          firstIcon: 'mdi-arrow-collapse-left',
-          lastIcon: 'mdi-arrow-collapse-right',
-          prevIcon: 'mdi-minus',
-          nextIcon: 'mdi-plus',
           'items-per-page-text': 'Usuários por página',
         }"
       >
@@ -60,7 +54,7 @@
                 <v-icon small class="mr-2" @click="editUser(user)">
                   mdi-pencil
                 </v-icon>
-                <v-icon small @click="deleteUser(user)"> mdi-delete </v-icon>
+                <v-icon small @click="openDeleteUser(user)"> mdi-delete </v-icon>
               </td>
             </tr>
           </tbody>
@@ -112,6 +106,7 @@ export default {
     },
     closeModals() {
       this.showModalUser = false;
+      this.showModalConfirm = false
       this.selectedUser = null;
     },
     addNewUser(newUser) {
@@ -127,12 +122,10 @@ export default {
       console.log(`Editando usuário: ${user.name}`);
       this.openModalUser();
     },
-    deleteUser(user) {
+    openDeleteUser(user) {
       console.log("deletar  - ", user);
-      // const confirmed = confirm("Tem certeza que deseja excluir este usuário?");
-      // if (confirmed) {
-      //   this.users = this.users.filter((user) => user.id !== userId);
-      // }
+      this.selectedUser = user;
+      this.showModalConfirm = true
     },
   },
 };
