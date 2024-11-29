@@ -59,7 +59,7 @@
 
 <script>
 import ModalUser from "@/components/modals/ModalUser.vue";
-import ModalConfirm from "@/components/modals/ModalConfirm.vue";
+import ModalConfirmDelete from "@/components/modals/ModalConfirmDelete.vue";
 
 import { getUsers } from "@/services/user.js";
 
@@ -67,7 +67,7 @@ export default {
   name: "UserList",
   components: {
     ModalUser,
-    ModalConfirm,
+    ModalConfirmDelete,
   },
   data() {
     return {
