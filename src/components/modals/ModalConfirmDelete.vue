@@ -41,7 +41,7 @@ export default {
   props: {
     show: { type: Boolean, required: true },
     message: { type: String, required: true },
-    user: { type: Object, required: true },
+    user: { required: true },
   },
   data() {
     return {

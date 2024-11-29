@@ -9,6 +9,7 @@
 
     <modal-confirm-delete
       :show="showModalConfirm"
+      message="Tem certeza que deseja excluir o usuário?"
       :user="selectedUser"
       @save="addNewUser"
       @close="closeModals"
@@ -20,6 +21,8 @@
         :items="users"
         :items-per-page="5"
         class="elevation-1"
+        :loading="loading"
+        loading-text="Carregando..."
       >
         <template v-slot:top>
           <v-toolbar flat>
@@ -42,11 +45,11 @@
                   contain
                 ></v-img>
               </td>
-              
+
               <td>{{ user.title }} {{ user.firstName }} {{ user.lastName }}</td>
 
               <td>
-                oi
+                <v-icon large color="green darken-2"> mdi-domain </v-icon>
               </td>
             </tr>
           </tbody>
@@ -79,6 +82,8 @@ export default {
       ],
       selectedUser: null,
       showModalUser: false,
+      showModalConfirm: false,
+      loading: false,
     };
   },
   mounted() {
@@ -107,7 +112,7 @@ export default {
       );
     },
     editUser(user) {
-      this.selectedUser = user
+      this.selectedUser = user;
       console.log(`Editando usuário: ${user.name}`);
     },
     deleteUser(userId) {
