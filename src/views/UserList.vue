@@ -19,9 +19,9 @@
         :headers="headers"
         :items="users"
         :items-per-page="5"
-        class="elevation-1"
         :loading="loading"
-        loading-text="Carregando..."
+        class="elevation-1"
+        loading-text="Carregando usuários..."
         :footer-props="{
           'items-per-page-text': 'Usuários por página',
         }"
@@ -31,6 +31,7 @@
             <v-toolbar-title>Lista de Usuários</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn color="primary" dark class="mb-2" @click="openModalUser()">
+              <v-icon>mdi-plus</v-icon>
               Novo Usuário
             </v-btn>
           </v-toolbar>
@@ -54,7 +55,9 @@
                 <v-icon small class="mr-2" @click="editUser(user)">
                   mdi-pencil
                 </v-icon>
-                <v-icon small @click="openDeleteUser(user)"> mdi-delete </v-icon>
+                <v-icon small @click="openDeleteUser(user)">
+                  mdi-delete
+                </v-icon>
               </td>
             </tr>
           </tbody>
@@ -106,7 +109,7 @@ export default {
     },
     closeModals() {
       this.showModalUser = false;
-      this.showModalConfirm = false
+      this.showModalConfirm = false;
       this.selectedUser = null;
     },
     addNewUser(newUser) {
@@ -125,7 +128,7 @@ export default {
     openDeleteUser(user) {
       console.log("deletar  - ", user);
       this.selectedUser = user;
-      this.showModalConfirm = true
+      this.showModalConfirm = true;
     },
   },
 };
@@ -145,5 +148,11 @@ li {
 }
 a {
   color: #42b983;
+}
+::v-deep .v-data-footer {
+  gap: 10px;
+  .v-data-footer__select {
+    gap: 10px;
+  }
 }
 </style>
