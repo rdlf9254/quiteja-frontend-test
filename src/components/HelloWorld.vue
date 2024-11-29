@@ -20,6 +20,7 @@
           >vue-devtools</a
         >
       </li>
+
       <li>
         <a
           href="https://vuetifyjs.com/en/getting-started/installation/"
@@ -29,6 +30,7 @@
         >
       </li>
     </ul>
+    <v-btn color="primary">Clique aqui</v-btn>
   </div>
 </template>
 
@@ -50,7 +52,9 @@ export default {
       .then((result) => {
         this.users = result;
       })
-      .catch((e) => {console.error('erro ', e)});
+      .catch((e) => {
+        console.error("erro ", e);
+      });
   },
 };
 </script>
