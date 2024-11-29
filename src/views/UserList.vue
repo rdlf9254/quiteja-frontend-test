@@ -7,6 +7,13 @@
       @close="closeModals"
     ></modal-user>
 
+    <modal-confirm-delete
+      :show="showModalConfirm"
+      :user="selectedUser"
+      @save="addNewUser"
+      @close="closeModals"
+    ></modal-confirm-delete>
+
     <v-container>
       <v-data-table
         :headers="headers"
@@ -35,7 +42,12 @@
                   contain
                 ></v-img>
               </td>
+              
               <td>{{ user.title }} {{ user.firstName }} {{ user.lastName }}</td>
+
+              <td>
+                oi
+              </td>
             </tr>
           </tbody>
         </template>
@@ -47,6 +59,7 @@
 
 <script>
 import ModalUser from "@/components/modals/ModalUser.vue";
+import ModalConfirm from "@/components/modals/ModalConfirm.vue";
 
 import { getUsers } from "@/services/user.js";
 
@@ -54,6 +67,7 @@ export default {
   name: "UserList",
   components: {
     ModalUser,
+    ModalConfirm,
   },
   data() {
     return {
@@ -85,7 +99,6 @@ export default {
       this.selectedUser = null;
     },
     addNewUser(newUser) {
-      // this.users.push(newUser);
       console.log("Usuário adicionado:", newUser);
     },
     viewInfo(user) {
