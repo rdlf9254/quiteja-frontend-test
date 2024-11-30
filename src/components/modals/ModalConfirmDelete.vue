@@ -65,7 +65,6 @@ export default {
     },
     confirmDelete() {
       this.$emit("delete", this.user);
-      this.closeModal();
     },
   },
 };

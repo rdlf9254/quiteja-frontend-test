@@ -108,15 +108,12 @@ export default {
     };
   },
   computed: {
-    // Obtém os usuários da store
     usersStore() {
       return this.$store.getters["users/allUsers"];
     },
-    // Verifica se já existem usuários na store
     hasUsers() {
       return this.$store.getters["users/hasUsers"];
     },
-    
   },
 
   mounted() {
@@ -126,17 +123,16 @@ export default {
     getUsersPreview() {
       if (this.hasUsers) {
         this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
-      }else {
+      } else {
         getUsers()
-        .then((result) => {
-          this.usersPreview = JSON.parse(JSON.stringify(result.data));
-          this.$store.commit("users/setUsers", result.data);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+          .then((result) => {
+            this.usersPreview = JSON.parse(JSON.stringify(result.data));
+            this.$store.commit("users/setUsers", result.data);
+          })
+          .catch((e) => {
+            console.error(e);
+          });
       }
-
     },
     openModalUser() {
       this.showModalUser = true;
@@ -144,12 +140,8 @@ export default {
     closeModals() {
       this.showModalUser = false;
       this.showModalConfirm = false;
-      this.selectedUser = null;
-      this.selectedId = null;
     },
     createNewUser(data) {
-      data.dar;
-      console.log("Usuário adicionado:", data);
       createUser(data)
         .then(() => {})
         .catch((e) => {
@@ -166,11 +158,9 @@ export default {
     },
     updateSelectedUser(data) {
       this.loading = true;
-      console.log(data);
 
       updateUser(this.selectedId, data)
         .then(() => {
-          console.log(`Editando usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
           console.error(e);
@@ -180,7 +170,6 @@ export default {
         });
     },
     openDeleteUser(user) {
-      console.log("deletar  - ", user);
       this.selectedId = user.id;
       this.showModalConfirm = true;
     },
@@ -191,20 +180,22 @@ export default {
 
       deleteUser(this.selectedId)
         .then(() => {
-          console.log(`delete usuário: ${this.selectedUser}`);
+          if (this.hasUsers) {
+            this.$store.dispatch("users/removeUserById", this.selectedId);
+            this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          }
         })
         .catch((e) => {
           console.error(e);
         })
         .finally(() => {
           this.loading = false;
+          this.selectedId = null;
         });
     },
     saveUser() {
       createUser(this.selectedId)
         .then(() => {
-          // this.selectedUser = result.data;
-          console.log(`delete usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
           console.error(e);

@@ -16,8 +16,17 @@ const users = {
     setUsers(state, users) {
       state.users = users;
     },
+    removeUser(state, userId) {
+      console.log('remove chamado', userId)
+      state.users = state.users.filter(user => user.id !== userId);
+    },
+  
   },
   actions: {
+    removeUserById({ commit }, userId) {
+      commit('removeUser', userId);
+    }
+  
   },
 };
 
