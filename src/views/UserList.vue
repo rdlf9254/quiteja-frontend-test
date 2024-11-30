@@ -13,6 +13,7 @@
       message="Tem certeza que deseja excluir o usuário?"
       :user="selectedUser"
       @close="closeModals()"
+      @delete="deleteSelectedUser()"
     ></modal-confirm-delete>
 
     <v-container>
@@ -56,9 +57,7 @@
                 ></v-img>
               </td>
 
-              <td>
-                {{ user.title }} {{ user.firstName }} {{ user.lastName }}
-              </td>
+              <td>{{ user.title }} {{ user.firstName }} {{ user.lastName }}</td>
 
               <td class="td-actions">
                 <v-icon small class="mr-2" @click="openEditUser(user)">
@@ -114,7 +113,7 @@ export default {
         this.users = result.data;
       })
       .catch((e) => {
-        console.error("erro ", e);
+        console.error(e);
       });
   },
   methods: {
@@ -125,21 +124,19 @@ export default {
       this.showModalUser = false;
       this.showModalConfirm = false;
       this.selectedUser = null;
-      this.selectedId = null
+      this.selectedId = null;
     },
     createNewUser(data) {
-      data.dar
+      data.dar;
       console.log("Usuário adicionado:", data);
       createUser(data)
-        .then(() => {
-        })
+        .then(() => {})
         .catch((e) => {
           console.error(e);
         })
         .finally(() => {
           this.loading = false;
         });
-
     },
     openEditUser(user) {
       this.selectedId = user.id;
@@ -155,7 +152,7 @@ export default {
           console.log(`Editando usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
-          console.error("erro ", e);
+          console.error(e);
         })
         .finally(() => {
           this.loading = false;
@@ -167,15 +164,16 @@ export default {
       this.showModalConfirm = true;
     },
     deleteSelectedUser() {
+      this.showModalConfirm = false;
+
       this.loading = true;
 
       deleteUser(this.selectedId)
         .then(() => {
-          // this.selectedUser = result.data;
           console.log(`delete usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
-          console.error("erro ", e);
+          console.error(e);
         })
         .finally(() => {
           this.loading = false;
@@ -188,20 +186,19 @@ export default {
           console.log(`delete usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
-          console.error("erro ", e);
+          console.error(e);
         })
         .finally(() => {
           this.loading = false;
         });
     },
     formatDate(dateString) {
-      const [day, month, year] = dateString.split('/');
+      const [day, month, year] = dateString.split("/");
       if (day && month && year) {
         return `${year}-${month}-${day}`;
       }
       return null;
     },
-
   },
 };
 </script>
