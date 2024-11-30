@@ -4,7 +4,6 @@ import { API } from "./api";
 
 export const getUsers = data => {
     return API.get("user", data).then(result => {
-        console.log('result - ', result)
       return result.data;
     });
   };
@@ -24,10 +23,11 @@ export const createUser = (data) => {
 };
 
 export const updateUser = (id, data) => {
-  return API.put(`user/${id}`, data).then((result) => {
-    console.log("result - ", result);
-    return result.data;
-  });
+  console.log('service - ',id,data)
+  // return API.put(`user/${id}`, data).then((result) => {
+  //   console.log("result - ", result);
+  //   return result.data;
+  // });
 };
 
 export const deleteUser = (id) => {

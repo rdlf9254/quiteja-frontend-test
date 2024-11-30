@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <section>
     <modal-user
       :show="showModalUser"
       :user="selectedUser"
-      @save="addNewUser"
+      @save="createNewUser"
+      @update="updateUser"
       @close="closeModals()"
     ></modal-user>
 
@@ -70,8 +71,7 @@
         </template>
       </v-data-table>
     </v-container>
-    {{ this.users }}
-  </div>
+  </section>
 </template>
 
 <script>
@@ -125,7 +125,7 @@ export default {
       this.showModalConfirm = false;
       this.selectedUser = null;
     },
-    addNewUser(newUser) {
+    createNewUser(newUser) {
       console.log("Usuário adicionado:", newUser);
     },
     // viewInfo(user) {
@@ -134,7 +134,7 @@ export default {
     //   );
     // },
     openEditUser(user) {
-      this.selectedId = user.id;
+      this.selectedUser = user;
       this.loading = true;
 
       getUserById(this.selectedIdid)
@@ -150,11 +150,12 @@ export default {
         });
       this.openModalUser();
     },
-    editUser(){
+    updateSelectedUser(data){
+      console.log('user ',data)
       this.loading = true;
 
-      updateUser(this.selectedId)
-        .then((result) => {
+      updateUser(this.selectedId, data)
+        .then(() => {
           // this.selectedUser = result.data;
           console.log(`Editando usuário: ${this.selectedUser}`);
         })
@@ -175,7 +176,7 @@ export default {
       this.loading = true;
 
       deleteUser(this.selectedId)
-        .then((result) => {
+        .then(() => {
           // this.selectedUser = result.data;
           console.log(`delete usuário: ${this.selectedUser}`);
         })
@@ -186,6 +187,23 @@ export default {
           this.loading = false;
         });
     },
+    saveUser() {
+      createUser(this.selectedId)
+        .then(() => {
+          // this.selectedUser = result.data;
+          console.log(`delete usuário: ${this.selectedUser}`);
+        })
+        .catch((e) => {
+          console.error("erro ", e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+
+    },
+    updateUser() {
+
+    }
   },
 };
 </script>
@@ -207,6 +225,7 @@ a {
 }
 ::v-deep .v-data-footer {
   gap: 10px;
+  justify-content: end;
   .v-data-footer__select {
     gap: 10px;
   }
