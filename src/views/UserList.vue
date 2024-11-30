@@ -48,7 +48,7 @@
         <template v-slot:body="{ items }">
           <tbody>
             <tr v-for="user in items" :key="user.id">
-              <td>
+              <td class="img-cell">
                 <v-img
                   :src="user.picture"
                   max-height="50"
@@ -204,19 +204,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.img-cell {
+  display: flex;
+  justify-content: center;
+
+  .v-image {
+    border-radius: 6px;
+  }
 }
 ::v-deep .v-data-footer {
   gap: 10px;
