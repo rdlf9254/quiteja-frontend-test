@@ -55,6 +55,7 @@
           v-model="userData.email"
           outlined
           :rules="[rules.required]"
+          :disabled="userId ? true : false"
         ></v-text-field>
 
         <!-- Data de Nascimento -->
@@ -202,7 +203,9 @@ export default {
   },
   methods: {
     closeModal() {
+      
       this.$emit("close");
+      this.resetForm()
     },
     saveUser() {
       if (this.formValid) {

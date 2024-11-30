@@ -4,7 +4,7 @@
       :show="showModalUser"
       :user-id="selectedId"
       @save="createNewUser"
-      @update="updateUser"
+      @update="updateSelectedUser"
       @close="closeModals()"
     ></modal-user>
 
@@ -56,7 +56,9 @@
                 ></v-img>
               </td>
 
-              <td>{{ user.title }} {{ user.firstName }} {{ user.lastName }}</td>
+              <td>
+                {{ user.title }} {{ user.firstName }} {{ user.lastName }}
+              </td>
 
               <td class="td-actions">
                 <v-icon small class="mr-2" @click="openEditUser(user)">
@@ -80,7 +82,6 @@ import ModalConfirmDelete from "@/components/modals/ModalConfirmDelete.vue";
 
 import {
   getUsers,
-  
   createUser,
   updateUser,
   deleteUser,
@@ -124,22 +125,22 @@ export default {
       this.showModalUser = false;
       this.showModalConfirm = false;
       this.selectedUser = null;
+      this.selectedId = null
     },
     createNewUser(newUser) {
       console.log("Usuário adicionado:", newUser);
     },
     openEditUser(user) {
-      this.selectedId = user.id
+      this.selectedId = user.id;
 
       this.openModalUser();
     },
-    updateSelectedUser(data){
-      console.log('user ',data)
+    updateSelectedUser(data) {
       this.loading = true;
+      console.log(data);
 
       updateUser(this.selectedId, data)
         .then(() => {
-          // this.selectedUser = result.data;
           console.log(`Editando usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
@@ -148,7 +149,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-
     },
     openDeleteUser(user) {
       console.log("deletar  - ", user);
@@ -182,11 +182,8 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-
     },
-    updateUser() {
-
-    }
+    updateUser() {},
   },
 };
 </script>
