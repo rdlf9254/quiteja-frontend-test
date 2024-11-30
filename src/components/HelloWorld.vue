@@ -30,31 +30,17 @@
         >
       </li>
     </ul>
-    <v-btn color="primary">Clique aqui</v-btn>
+    <v-btn color="primary" dark to="/usuarios">
+      Ir para a página de usuários
+    </v-btn>
   </div>
 </template>
 
 <script>
-import { getUsers } from "@/services/user.js";
-
 export default {
   name: "HelloWorld",
   props: {
     msg: String,
-  },
-  data() {
-    return {
-      users: null,
-    };
-  },
-  mounted() {
-    getUsers()
-      .then((result) => {
-        this.users = result;
-      })
-      .catch((e) => {
-        console.error("erro ", e);
-      });
   },
 };
 </script>

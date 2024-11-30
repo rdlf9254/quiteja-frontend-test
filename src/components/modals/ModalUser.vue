@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>
         <span class="text-h5">{{
-          userData.id ? "Editar Usuário" : "Adicionar Novo Usuário"
+          userId ? "Editar Usuário" : "Adicionar Novo Usuário"
         }}</span>
       </v-card-title>
 
@@ -30,6 +30,8 @@
           v-model="userData.title"
           outlined
           :items="titles"
+          item-text="label"
+          item-value="value"
         ></v-select>
 
         <!-- URL da Imagem -->
@@ -45,6 +47,8 @@
           v-model="userData.gender"
           outlined
           :items="gender"
+          item-text="label"
+          item-value="value"
         ></v-select>
 
         <!-- Email -->
@@ -102,12 +106,15 @@
           :rules="[rules.required]"
         ></v-text-field>
 
-        <v-text-field
+        <v-select
           label="Fuso Horário"
           v-model="userData.location.timezone"
           outlined
+          :items="timezones"
+          item-text="label"
+          item-value="value"
           :rules="[rules.required]"
-        ></v-text-field>
+        ></v-select>
       </v-card-text>
 
       <v-card-actions>
@@ -118,7 +125,7 @@
           :disabled="!formValid"
           @click="saveUser"
         >
-          {{ userData.id ? "Salvar Alterações" : "Salvar" }}
+          {{ userId ? "Salvar Alterações" : "Salvar" }}
         </v-btn>
         <v-btn color="red darken-1" text @click="closeModal"> Cancelar </v-btn>
       </v-card-actions>
@@ -128,6 +135,7 @@
 
 <script>
 import { getUserById } from "@/services/user.js";
+import timezones from "@/assets/timezones.json";
 
 export default {
   name: "modal-user",
@@ -158,8 +166,19 @@ export default {
         registerDate: "",
         updatedDate: "",
       },
-      titles: ["mr", "ms", "mrs", "miss", "dr", ""],
-      gender: ["male", "female", "other", ""],
+      titles: [
+        { label: "Mr.", value: "mr" },
+        { label: "Ms.", value: "ms" },
+        { label: "Mrs.", value: "mrs" },
+        { label: "Miss.", value: "miss" },
+        { label: "Dr.", value: "dr" },
+      ],
+      gender: [
+        { label: "Masculino", value: "male" },
+        { label: "Feminino", value: "female" },
+        { label: "Outro", value: "other" },
+      ],
+      timezones,
       rules: {
         required: (value) => !!value || "Campo obrigatório.",
       },
@@ -170,6 +189,9 @@ export default {
       return (
         this.userData.firstName && this.userData.lastName && this.userData.email
       );
+    },
+    usersInfosStore() {
+      return this.$store.getters["users/allUsersInfos"];
     },
   },
   watch: {
@@ -233,28 +255,22 @@ export default {
       };
     },
     getUserData() {
-      if (this.hasUsers) {
-        let userStoreData = this.$store.getters["users/getUserById"](
-          this.userId
-        );
-        if (!userStoreData) {
-          getUserById(this.userId)
-            .then((result) => {
-              this.userData = JSON.parse(JSON.stringify(result));
-              this.userData.dateOfBirth =
-                this.userData.dateOfBirth.split("T")[0];
-              this.$store.dispatch("users/addUserInfoToList", this.userData);
-            })
-            .catch((e) => {
-              console.error(e);
-            })
-            .finally(() => {
-              this.loading = false;
-            });
-        } else {
-          this.userData = JSON.parse(JSON.stringify(userStoreData));
-        }
-      }
+      getUserById(this.userId)
+        .then((result) => {
+          this.userData = JSON.parse(JSON.stringify(result));
+          this.userData.dateOfBirth = this.userData.dateOfBirth.split("T")[0];
+          this.$store.dispatch("users/addUserInfoToList", this.userData);
+        })
+        .catch((e) => {
+          console.error(e);
+          this.$toast({
+            message: "Falha ao obter dados do usuário!",
+            type: "error",
+          });
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };
