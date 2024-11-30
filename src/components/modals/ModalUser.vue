@@ -169,6 +169,7 @@ export default {
   watch: {
     show(val) {
       this.dialog = val;
+      if(val && this.userId) this.getUserData()
     },
     dialog(val) {
       if (!val) this.closeModal();

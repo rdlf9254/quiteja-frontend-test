@@ -158,9 +158,16 @@ export default {
     },
     updateSelectedUser(data) {
       this.loading = true;
+      this.showModalUser = false;
 
       updateUser(this.selectedId, data)
         .then(() => {
+          if (this.hasUsers) {
+            this.$store.dispatch("users/updateUserById", data);
+            this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          } else {
+            this.getUsersPreview()
+          }
         })
         .catch((e) => {
           console.error(e);
@@ -183,6 +190,8 @@ export default {
           if (this.hasUsers) {
             this.$store.dispatch("users/removeUserById", this.selectedId);
             this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          } else {
+            this.getUsersPreview()
           }
         })
         .catch((e) => {
