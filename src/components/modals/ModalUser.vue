@@ -57,12 +57,8 @@
         ></v-text-field>
 
         <!-- Data de Nascimento -->
-        <v-text-field
-          label="Data de Nascimento"
-          v-model="userData.dateOfBirth"
-          outlined
-          :rules="[rules.required]"
-        ></v-text-field>
+        <span>Data de nascimento:</span>
+        <v-date-picker v-model="userData.dateOfBirth" class="mt-4" :max="today" full-width></v-date-picker>
 
         <!-- Telefone -->
         <v-text-field
@@ -134,7 +130,8 @@ export default {
   data() {
     return {
       dialog: this.show,
-      menu:false,
+      menu: false,
+      today: new Date().toISOString().split("T")[0],
       userData: {
         id: "",
         title: "",
@@ -143,7 +140,7 @@ export default {
         picture: "",
         gender: "",
         email: "",
-        dateOfBirth: "",
+        dateOfBirth: new Date().toISOString().split("T")[0],
         phone: "",
         location: {
           street: "",
@@ -215,7 +212,7 @@ export default {
         picture: "",
         gender: "",
         email: "",
-        dateOfBirth: "",
+        dateOfBirth: new Date().toISOString().split("T")[0],
         phone: "",
         location: {
           street: "",
@@ -232,6 +229,7 @@ export default {
       getUserById(this.userId)
         .then((result) => {
           this.userData = JSON.parse(JSON.stringify(result));
+          this.userData.dateOfBirth = this.userData.dateOfBirth.split("T")[0]
 
           // this.selectedUser = result.data;
           console.log("Editando usuário: ", this.userData);
@@ -247,4 +245,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+::v-deep .v-picker__title {
+  background: grey;
+}
+</style>
