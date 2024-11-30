@@ -19,7 +19,7 @@
     <v-container>
       <v-data-table
         :headers="headers"
-        :items="users"
+        :items="usersPreview"
         :items-per-page="5"
         :loading="loading"
         class="elevation-1"
@@ -36,7 +36,7 @@
               color="primary"
               dark
               class="mb-2"
-              @click="openModalUser()"
+              @click="openNewUser()"
               :disabled="loading"
             >
               <v-icon>mdi-plus</v-icon>
@@ -94,7 +94,7 @@ export default {
   },
   data() {
     return {
-      users: [],
+      usersPreview: [],
       headers: [
         { text: "Foto", value: "picture", sortable: false },
         { text: "Nome", value: "firstName" },
@@ -107,30 +107,59 @@ export default {
       loading: false,
     };
   },
+  computed: {
+    usersStore() {
+      return this.$store.getters["users/allUsers"];
+    },
+    hasUsers() {
+      return this.$store.getters["users/hasUsers"];
+    },
+  },
+
   mounted() {
-    getUsers()
-      .then((result) => {
-        this.users = result.data;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    this.getUsersPreview();
   },
   methods: {
+    getUsersPreview() {
+      if (this.hasUsers) {
+        this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+      } else {
+        getUsers()
+          .then((result) => {
+            this.usersPreview = JSON.parse(JSON.stringify(result.data));
+            this.$store.commit("users/setUsers", result.data);
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      }
+    },
+    openNewUser() {
+      this.selectedUser = null;
+      this.selectedId = null;
+      this.openModalUser()
+    },
     openModalUser() {
       this.showModalUser = true;
     },
     closeModals() {
       this.showModalUser = false;
       this.showModalConfirm = false;
-      this.selectedUser = null;
-      this.selectedId = null;
     },
     createNewUser(data) {
-      data.dar;
-      console.log("Usuário adicionado:", data);
+      this.loading = true;
+      this.showModalUser = false;
+
       createUser(data)
-        .then(() => {})
+        .then(() => {
+          if (this.hasUsers) {
+            this.$store.dispatch("users/addUserToList", data);
+            this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          } else {
+            this.getUsersPreview()
+          }
+
+        })
         .catch((e) => {
           console.error(e);
         })
@@ -145,11 +174,16 @@ export default {
     },
     updateSelectedUser(data) {
       this.loading = true;
-      console.log(data);
+      this.showModalUser = false;
 
       updateUser(this.selectedId, data)
         .then(() => {
-          console.log(`Editando usuário: ${this.selectedUser}`);
+          if (this.hasUsers) {
+            this.$store.dispatch("users/updateUserById", data);
+            this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          } else {
+            this.getUsersPreview()
+          }
         })
         .catch((e) => {
           console.error(e);
@@ -159,7 +193,6 @@ export default {
         });
     },
     openDeleteUser(user) {
-      console.log("deletar  - ", user);
       this.selectedId = user.id;
       this.showModalConfirm = true;
     },
@@ -170,20 +203,24 @@ export default {
 
       deleteUser(this.selectedId)
         .then(() => {
-          console.log(`delete usuário: ${this.selectedUser}`);
+          if (this.hasUsers) {
+            this.$store.dispatch("users/removeUserById", this.selectedId);
+            this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          } else {
+            this.getUsersPreview()
+          }
         })
         .catch((e) => {
           console.error(e);
         })
         .finally(() => {
           this.loading = false;
+          this.selectedId = null;
         });
     },
     saveUser() {
       createUser(this.selectedId)
         .then(() => {
-          // this.selectedUser = result.data;
-          console.log(`delete usuário: ${this.selectedUser}`);
         })
         .catch((e) => {
           console.error(e);
