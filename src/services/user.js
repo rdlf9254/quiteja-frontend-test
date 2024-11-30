@@ -16,7 +16,7 @@ export const getUserById = (id) => {
 };
 
 export const createUser = (data) => {
-  return API.post("user", data).then((result) => {
+  return API.post("user/create", data).then((result) => {
     console.log("result - ", result);
     return result.data;
   });

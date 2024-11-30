@@ -30,7 +30,6 @@
           v-model="userData.title"
           outlined
           :items="titles"
-          :rules="[rules.required]"
         ></v-select>
 
         <!-- URL da Imagem -->
@@ -38,7 +37,6 @@
           label="URL da Imagem"
           v-model="userData.picture"
           outlined
-          :rules="[rules.required]"
         ></v-text-field>
 
         <!-- Gênero -->
@@ -46,7 +44,7 @@
           label="Gênero"
           v-model="userData.gender"
           outlined
-          :items="['male', 'female', 'other']"
+          :items="gender"
         ></v-select>
 
         <!-- Email -->
@@ -136,6 +134,7 @@ export default {
   data() {
     return {
       dialog: this.show,
+      menu:false,
       userData: {
         id: "",
         title: "",
@@ -156,7 +155,8 @@ export default {
         registerDate: "",
         updatedDate: "",
       },
-      titles: ["mr", "mrs", "miss", "dr", "prof"],
+      titles: ["mr", "ms", "mrs", "miss", "dr", ""],
+      gender: ["male", "female", "other", ""],
       rules: {
         required: (value) => !!value || "Campo obrigatório.",
       },
@@ -165,17 +165,7 @@ export default {
   computed: {
     formValid() {
       return (
-        this.userData.firstName &&
-        this.userData.lastName &&
-        this.userData.title &&
-        this.userData.gender &&
-        this.userData.dateOfBirth &&
-        this.userData.phone &&
-        this.userData.location.street &&
-        this.userData.location.city &&
-        this.userData.location.state &&
-        this.userData.location.country &&
-        this.userData.location.timezone
+        this.userData.firstName && this.userData.lastName && this.userData.email
       );
     },
   },
@@ -203,9 +193,8 @@ export default {
   },
   methods: {
     closeModal() {
-      
       this.$emit("close");
-      this.resetForm()
+      this.resetForm();
     },
     saveUser() {
       if (this.formValid) {
@@ -240,7 +229,6 @@ export default {
       };
     },
     getUserData() {
-      console.log("rrr");
       getUserById(this.userId)
         .then((result) => {
           this.userData = JSON.parse(JSON.stringify(result));

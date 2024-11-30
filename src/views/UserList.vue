@@ -127,8 +127,19 @@ export default {
       this.selectedUser = null;
       this.selectedId = null
     },
-    createNewUser(newUser) {
-      console.log("Usuário adicionado:", newUser);
+    createNewUser(data) {
+      data.dar
+      console.log("Usuário adicionado:", data);
+      createUser(data)
+        .then(() => {
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+
     },
     openEditUser(user) {
       this.selectedId = user.id;
@@ -183,7 +194,14 @@ export default {
           this.loading = false;
         });
     },
-    updateUser() {},
+    formatDate(dateString) {
+      const [day, month, year] = dateString.split('/');
+      if (day && month && year) {
+        return `${year}-${month}-${day}`;
+      }
+      return null;
+    },
+
   },
 };
 </script>
