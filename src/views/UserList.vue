@@ -96,9 +96,9 @@ export default {
     return {
       usersPreview: [],
       headers: [
-        { text: "Foto", value: "picture", sortable: false },
-        { text: "Nome", value: "firstName" },
-        { text: "Ações", value: "Actions", sortable: false },
+        { text: "Foto", value: "picture", sortable: false, align: "center" },
+        { text: "Nome", value: "firstName", align: "center" },
+        { text: "Ações", value: "Actions", sortable: false, align: "center" },
       ],
       selectedUser: null,
       selectedId: null,
@@ -224,7 +224,10 @@ export default {
             this.getUsersPreview();
           }
 
-          this.$toast({ message: "Usuário removido com sucesso!", type: "success" });
+          this.$toast({
+            message: "Usuário removido com sucesso!",
+            type: "success",
+          });
         })
         .catch((e) => {
           console.error(e);
@@ -238,7 +241,10 @@ export default {
     saveUser() {
       createUser(this.selectedId)
         .then(() => {
-          this.$toast({ message: "Usuário criado com sucesso!", type: "success" });
+          this.$toast({
+            message: "Usuário criado com sucesso!",
+            type: "success",
+          });
         })
         .catch((e) => {
           console.error(e);

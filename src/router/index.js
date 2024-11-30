@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import UserList from "@/views/UserList.vue";
-import NotFound from "@/views/NotFound.vue"; // Importa o componente de erro
+import NotFound from "@/views/NotFound.vue";
 
 Vue.use(VueRouter);
 
