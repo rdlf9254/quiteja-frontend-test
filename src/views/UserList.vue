@@ -36,7 +36,7 @@
               color="primary"
               dark
               class="mb-2"
-              @click="openModalUser()"
+              @click="openNewUser()"
               :disabled="loading"
             >
               <v-icon>mdi-plus</v-icon>
@@ -134,6 +134,11 @@ export default {
           });
       }
     },
+    openNewUser() {
+      this.selectedUser = null;
+      this.selectedId = null;
+      this.openModalUser()
+    },
     openModalUser() {
       this.showModalUser = true;
     },
@@ -142,8 +147,19 @@ export default {
       this.showModalConfirm = false;
     },
     createNewUser(data) {
+      this.loading = true;
+      this.showModalUser = false;
+
       createUser(data)
-        .then(() => {})
+        .then(() => {
+          if (this.hasUsers) {
+            this.$store.dispatch("users/addUserToList", data);
+            this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+          } else {
+            this.getUsersPreview()
+          }
+
+        })
         .catch((e) => {
           console.error(e);
         })

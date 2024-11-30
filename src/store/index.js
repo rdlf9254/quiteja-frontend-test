@@ -22,6 +22,9 @@ const users = {
       const index = state.users.findIndex((user) => user.id === updatedUser.id);
       if (index !== -1) state.users.splice(index, 1, updatedUser);
     },
+    addUser(state, newUser) {
+      state.users.unshift(newUser);
+    },
   },
   actions: {
     removeUserById({ commit }, userId) {
@@ -30,7 +33,9 @@ const users = {
     updateUserById({ commit }, updatedUser) {
       commit('updateUser', updatedUser);
     },
-
+    addUserToList({ commit }, newUser) {
+      commit('addUser', newUser);
+    },
   },
 };
 
