@@ -58,7 +58,12 @@
 
         <!-- Data de Nascimento -->
         <span>Data de nascimento:</span>
-        <v-date-picker v-model="userData.dateOfBirth" class="mt-4" :max="today" full-width></v-date-picker>
+        <v-date-picker
+          v-model="userData.dateOfBirth"
+          class="mt-4"
+          :max="today"
+          full-width
+        ></v-date-picker>
 
         <!-- Telefone -->
         <v-text-field
@@ -132,6 +137,7 @@ export default {
       dialog: this.show,
       menu: false,
       today: new Date().toISOString().split("T")[0],
+      loading: false,
       userData: {
         id: "",
         title: "",
@@ -169,7 +175,7 @@ export default {
   watch: {
     show(val) {
       this.dialog = val;
-      if(val && this.userId) this.getUserData()
+      if (val && this.userId) this.getUserData();
     },
     dialog(val) {
       if (!val) this.closeModal();
@@ -227,20 +233,28 @@ export default {
       };
     },
     getUserData() {
-      getUserById(this.userId)
-        .then((result) => {
-          this.userData = JSON.parse(JSON.stringify(result));
-          this.userData.dateOfBirth = this.userData.dateOfBirth.split("T")[0]
-
-          // this.selectedUser = result.data;
-          console.log("Editando usuário: ", this.userData);
-        })
-        .catch((e) => {
-          console.error(e);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      if (this.hasUsers) {
+        let userStoreData = this.$store.getters["users/getUserById"](
+          this.userId
+        );
+        if (!userStoreData) {
+          getUserById(this.userId)
+            .then((result) => {
+              this.userData = JSON.parse(JSON.stringify(result));
+              this.userData.dateOfBirth =
+                this.userData.dateOfBirth.split("T")[0];
+              this.$store.dispatch("users/addUserInfoToList", this.userData);
+            })
+            .catch((e) => {
+              console.error(e);
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        } else {
+          this.userData = JSON.parse(JSON.stringify(userStoreData));
+        }
+      }
     },
   },
 };

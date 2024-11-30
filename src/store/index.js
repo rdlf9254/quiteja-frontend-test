@@ -5,10 +5,16 @@ const users = {
   namespaced: true,
   state: {
     users: [],
+    usersInfos:[]
   },
   getters: {
     allUsers: (state) => state.users,
     hasUsers: (state) => state.users.length > 0,
+    getUserInfoById: (state) => (userId) => {
+      const user = state.usersInfos.find(user => user.id === userId);
+      return user || null;
+    },
+
   },
   mutations: {
     setUsers(state, users) {
@@ -25,6 +31,10 @@ const users = {
     addUser(state, newUser) {
       state.users.unshift(newUser);
     },
+    addUserInfo(state, newUserInfo) {
+      state.usersInfos.push(newUserInfo);  
+    },
+
   },
   actions: {
     removeUserById({ commit }, userId) {
@@ -36,6 +46,10 @@ const users = {
     addUserToList({ commit }, newUser) {
       commit('addUser', newUser);
     },
+    addUserInfoToList({ commit }, newUserInfo) {
+      commit('addUserInfo', newUserInfo);
+    },
+
   },
 };
 
