@@ -2,7 +2,7 @@
   <section>
     <modal-user
       :show="showModalUser"
-      :user="selectedUser"
+      :user-id="selectedId"
       @save="createNewUser"
       @update="updateUser"
       @close="closeModals()"
@@ -80,7 +80,7 @@ import ModalConfirmDelete from "@/components/modals/ModalConfirmDelete.vue";
 
 import {
   getUsers,
-  getUserById,
+  
   createUser,
   updateUser,
   deleteUser,
@@ -128,26 +128,9 @@ export default {
     createNewUser(newUser) {
       console.log("Usuário adicionado:", newUser);
     },
-    // viewInfo(user) {
-    //   console.log(
-    //     `ver info de usuário:\nNome: ${user.name}\nTítulo: ${user.title}`
-    //   );
-    // },
     openEditUser(user) {
-      this.selectedUser = user;
-      this.loading = true;
+      this.selectedId = user.id
 
-      getUserById(this.selectedIdid)
-        .then((result) => {
-          this.selectedUser = result.data;
-          console.log(`Editando usuário: ${this.selectedUser}`);
-        })
-        .catch((e) => {
-          console.error("erro ", e);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
       this.openModalUser();
     },
     updateSelectedUser(data){

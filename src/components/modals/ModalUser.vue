@@ -38,7 +38,75 @@
           label="URL da Imagem"
           v-model="userData.picture"
           outlined
-          :rules="[rules.required, rules.validUrl]"
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <!-- Gênero -->
+        <v-select
+          label="Gênero"
+          v-model="userData.gender"
+          outlined
+          :items="['male', 'female', 'other']"
+        ></v-select>
+
+        <!-- Email -->
+        <v-text-field
+          label="Email"
+          v-model="userData.email"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <!-- Data de Nascimento -->
+        <v-text-field
+          label="Data de Nascimento"
+          v-model="userData.dateOfBirth"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <!-- Telefone -->
+        <v-text-field
+          label="Telefone"
+          v-model="userData.phone"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <!-- Endereço -->
+        <v-text-field
+          label="Rua"
+          v-model="userData.location.street"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <v-text-field
+          label="Cidade"
+          v-model="userData.location.city"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <v-text-field
+          label="Estado"
+          v-model="userData.location.state"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <v-text-field
+          label="País"
+          v-model="userData.location.country"
+          outlined
+          :rules="[rules.required]"
+        ></v-text-field>
+
+        <v-text-field
+          label="Fuso Horário"
+          v-model="userData.location.timezone"
+          outlined
+          :rules="[rules.required]"
         ></v-text-field>
       </v-card-text>
 
@@ -59,27 +127,37 @@
 </template>
 
 <script>
+import { getUserById } from "@/services/user.js";
+
 export default {
   name: "modal-user",
-  props: {
-    show: { type: Boolean, required: true },
-    user: { type: Object, default: () => null },
-  },
+  props: ["show", "userId"],
   data() {
     return {
       dialog: this.show,
       userData: {
         id: "",
+        title: "",
         firstName: "",
         lastName: "",
-        title: "",
         picture: "",
+        gender: "",
+        email: "",
+        dateOfBirth: "",
+        phone: "",
+        location: {
+          street: "",
+          city: "",
+          state: "",
+          country: "",
+          timezone: "",
+        },
+        registerDate: "",
+        updatedDate: "",
       },
-      titles: ["Mr.", "Mrs.", "Miss", "Dr.", "Prof."], // Opções para o select
+      titles: ["mr", "mrs", "miss", "dr", "prof"],
       rules: {
         required: (value) => !!value || "Campo obrigatório.",
-        validUrl: (value) =>
-          !value || /^(http|https):\/\/[^ "]+$/.test(value) || "URL inválida.",
       },
     };
   },
@@ -89,7 +167,14 @@ export default {
         this.userData.firstName &&
         this.userData.lastName &&
         this.userData.title &&
-        this.rules.validUrl(this.userData.picture) === true
+        this.userData.gender &&
+        this.userData.dateOfBirth &&
+        this.userData.phone &&
+        this.userData.location.street &&
+        this.userData.location.city &&
+        this.userData.location.state &&
+        this.userData.location.country &&
+        this.userData.location.timezone
       );
     },
   },
@@ -100,13 +185,20 @@ export default {
     dialog(val) {
       if (!val) this.closeModal();
     },
-    user(val) {
+    userId(val) {
       if (val) {
-        this.userData = { ...val };
+        this.getUserData();
       } else {
         this.resetForm();
       }
     },
+  },
+  mounted() {
+    if (this.userId) {
+      this.getUserData();
+    } else {
+      this.resetForm();
+    }
   },
   methods: {
     closeModal() {
@@ -125,11 +217,40 @@ export default {
     resetForm() {
       this.userData = {
         id: "",
+        title: "",
         firstName: "",
         lastName: "",
-        title: "",
         picture: "",
+        gender: "",
+        email: "",
+        dateOfBirth: "",
+        phone: "",
+        location: {
+          street: "",
+          city: "",
+          state: "",
+          country: "",
+          timezone: "",
+        },
+        registerDate: "",
+        updatedDate: "",
       };
+    },
+    getUserData() {
+      console.log("rrr");
+      getUserById(this.userId)
+        .then((result) => {
+          this.userData = JSON.parse(JSON.stringify(result));
+
+          // this.selectedUser = result.data;
+          console.log("Editando usuário: ", this.userData);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };

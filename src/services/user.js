@@ -10,7 +10,7 @@ export const getUsers = data => {
 
 export const getUserById = (id) => {
   return API.get(`user/${id}`).then((result) => {
-    console.log("result - ", result);
+    console.log("result - ", result.data);
     return result.data;
   });
 };
