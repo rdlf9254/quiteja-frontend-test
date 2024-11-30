@@ -33,7 +33,7 @@
             <v-toolbar-title>Lista de Usuários</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn
-              color="primary"
+              color="deep-purple accent-4"
               dark
               class="mb-2"
               @click="openNewUser()"
@@ -131,13 +131,17 @@ export default {
           })
           .catch((e) => {
             console.error(e);
+            this.$toast({
+              message: "Falha ao buscar usuários!",
+              type: "error",
+            });
           });
       }
     },
     openNewUser() {
       this.selectedUser = null;
       this.selectedId = null;
-      this.openModalUser()
+      this.openModalUser();
     },
     openModalUser() {
       this.showModalUser = true;
@@ -156,12 +160,17 @@ export default {
             this.$store.dispatch("users/addUserToList", data);
             this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
           } else {
-            this.getUsersPreview()
+            this.getUsersPreview();
           }
 
+          this.$toast({
+            message: "Usuário criado com sucesso!",
+            type: "success",
+          });
         })
         .catch((e) => {
           console.error(e);
+          this.$toast({ message: "Falha ao criar usuário!", type: "error" });
         })
         .finally(() => {
           this.loading = false;
@@ -182,11 +191,16 @@ export default {
             this.$store.dispatch("users/updateUserById", data);
             this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
           } else {
-            this.getUsersPreview()
+            this.getUsersPreview();
           }
+          this.$toast({
+            message: "Usuário atualizado com sucesso!",
+            type: "success",
+          });
         })
         .catch((e) => {
           console.error(e);
+          this.$toast({ message: "Erro ao atualizar usuário!", type: "error" });
         })
         .finally(() => {
           this.loading = false;
@@ -207,11 +221,14 @@ export default {
             this.$store.dispatch("users/removeUserById", this.selectedId);
             this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
           } else {
-            this.getUsersPreview()
+            this.getUsersPreview();
           }
+
+          this.$toast({ message: "Usuário removido com sucesso!", type: "success" });
         })
         .catch((e) => {
           console.error(e);
+          this.$toast({ message: "Falha ao remover usuário!", type: "error" });
         })
         .finally(() => {
           this.loading = false;
@@ -221,9 +238,11 @@ export default {
     saveUser() {
       createUser(this.selectedId)
         .then(() => {
+          this.$toast({ message: "Usuário criado com sucesso!", type: "success" });
         })
         .catch((e) => {
           console.error(e);
+          this.$toast({ message: "Falha ao criar usuário!", type: "error" });
         })
         .finally(() => {
           this.loading = false;

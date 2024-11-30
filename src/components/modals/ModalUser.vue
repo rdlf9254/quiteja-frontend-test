@@ -247,6 +247,10 @@ export default {
             })
             .catch((e) => {
               console.error(e);
+              this.$toast({
+                message: "Falha ao obter dados do usuário!",
+                type: "error",
+              });
             })
             .finally(() => {
               this.loading = false;
