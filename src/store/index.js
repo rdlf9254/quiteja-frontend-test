@@ -9,6 +9,7 @@ const users = {
   },
   getters: {
     allUsers: (state) => state.users,
+    allUsersInfos: (state) => state.usersInfos,
     hasUsers: (state) => state.users.length > 0,
     getUserInfoById: (state) => (userId) => {
       const user = state.usersInfos.find(user => user.id === userId);
