@@ -14,7 +14,9 @@ const opts = {
   lang: {
     locales: { pt },
     current: 'pt'
-  }
+  },
+
+
 
 };
 

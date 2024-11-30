@@ -19,7 +19,7 @@
     <v-container>
       <v-data-table
         :headers="headers"
-        :items="users"
+        :items="usersPreview"
         :items-per-page="5"
         :loading="loading"
         class="elevation-1"
@@ -94,7 +94,7 @@ export default {
   },
   data() {
     return {
-      users: [],
+      usersPreview: [],
       headers: [
         { text: "Foto", value: "picture", sortable: false },
         { text: "Nome", value: "firstName" },
@@ -107,16 +107,37 @@ export default {
       loading: false,
     };
   },
+  computed: {
+    // Obtém os usuários da store
+    usersStore() {
+      return this.$store.getters["users/allUsers"];
+    },
+    // Verifica se já existem usuários na store
+    hasUsers() {
+      return this.$store.getters["users/hasUsers"];
+    },
+    
+  },
+
   mounted() {
-    getUsers()
-      .then((result) => {
-        this.users = result.data;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    this.getUsersPreview();
   },
   methods: {
+    getUsersPreview() {
+      if (this.hasUsers) {
+        this.usersPreview = JSON.parse(JSON.stringify(this.usersStore));
+      }else {
+        getUsers()
+        .then((result) => {
+          this.usersPreview = JSON.parse(JSON.stringify(result.data));
+          this.$store.commit("users/setUsers", result.data);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      }
+
+    },
     openModalUser() {
       this.showModalUser = true;
     },
