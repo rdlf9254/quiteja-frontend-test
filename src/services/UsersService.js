@@ -7,8 +7,8 @@ export default {
     });
   },
   updateUser(id, userData) {
-    const { firstName, lastName } = userData;
-    return apiClient.put(`/user/${id}`, { firstName, lastName });
+    const { firstName, lastName, title } = userData;
+    return apiClient.put(`/user/${id}`, { firstName, lastName, title });
   },
   deleteUser(id) {
     return apiClient.delete(`/user/${id}`);

@@ -9,7 +9,19 @@
         <v-row>
           <v-col
             cols="12"
-            sm="6"
+            sm="4"
+          >
+            <v-select
+              label="Título"
+              v-model="editableUser.title"
+              :items="titleOptions"
+              clearable
+              :error-messages="errors.title"
+            ></v-select>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="4"
           >
             <v-text-field
               label="Nome*"
@@ -20,7 +32,7 @@
           </v-col>
           <v-col
             cols="12"
-            sm="6"
+            sm="4"
           >
             <v-text-field
               label="Sobrenome*"
@@ -65,9 +77,17 @@ export default {
     return {
       editableUser: {},
       errors: {
+        title: "",
         firstName: "",
         lastName: "",
       },
+      titleOptions: [
+        { text: 'Mr.', value: 'mr' },
+        { text: 'Mrs.', value: 'mrs' },
+        { text: 'Miss.', value: 'miss' },
+        { text: 'Ms.', value: 'ms' },
+        { text: 'Dr.', value: 'dr' }
+      ]
     };
   },
   watch: {
@@ -119,6 +139,7 @@ export default {
 
     clearErrors() {
       this.errors = {
+        title: "",
         firstName: "",
         lastName: "",
       };
