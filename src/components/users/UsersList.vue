@@ -17,13 +17,25 @@
       @close="closeDeleteModal"
       @confirm="handleDelete"
     ></confirm-modal>
-    
+    <v-card-title>
+      Usuários
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Pesquisar"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+
     <v-card>
       <v-data-table
         :headers="headers"
         :items="users"
         :items-per-page="10"
         class="elevation-1"
+        :search="search"
       >
         <template slot="item.picture" slot-scope="{ item }">
           <v-avatar size="36px" class="my-2">
@@ -59,6 +71,7 @@ export default {
   },
   data() {
     return {
+      search: '',
       isEditModalVisible: false,
       isDeleteConfirmVisible: false,
       selectedUser: null,
