@@ -9,7 +9,7 @@
         />
         <h1 class="text-h4 font-weight-bold mr-5 text-nowrap">Usuários</h1>
         <v-divider vertical class="mr-5"></v-divider>
-        <span class="text-body-1 text-wrap">
+        <span class="text-subtitle-2">
           Bem vindo ao sistema de gerenciamento de usuários! Aqui você pode gerenciar os usuários do seu sistema, é possivel visualizar em lista ou em cards, editar e excluir usuários.
           <!-- <strong>Total de usuários:</strong> {{ users.length }} -->
         </span>
