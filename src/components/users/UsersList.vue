@@ -14,12 +14,13 @@
       :message="`Você tem certeza que deseja excluir o usuário ${selectedUser?.firstName}?`"
       confirm-text="Excluir"
       confirm-color="red darken-1"
+      confirm-icon="mdi-delete"
+      cancel-icon="mdi-close"
       @close="closeDeleteModal"
       @confirm="handleDelete"
     ></confirm-modal>
 
     <v-card-title>
-      <!-- Usuários -->
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"

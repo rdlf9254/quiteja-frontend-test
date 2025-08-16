@@ -7,7 +7,7 @@ const state = {
   const mutations = {
     SHOW_TOASTR(state, payload) {
       state.text = payload.text;
-      state.color = payload.color || 'success'; // 'success' como padrão
+      state.color = payload.color || 'success';
       state.show = true;
     },
     HIDE_TOASTR(state) {
