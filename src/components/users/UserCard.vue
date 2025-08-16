@@ -5,7 +5,7 @@
         <v-img 
           v-if="user.picture" 
           :src="user.picture" 
-          :alt="user.firstName"
+          :alt="user.displayName || user.firstName"
         />
         <v-icon v-else large color="white">
           mdi-account
@@ -13,10 +13,7 @@
       </v-avatar>
       <div class="text-center">
         <div class="text-h6 font-weight-bold">
-          {{ user.firstName }} {{ user.lastName }}
-        </div>
-        <div class="text-subtitle-2 text--secondary">
-          {{ user.email }}
+          {{ user.displayName || `${user.firstName} ${user.lastName}` }}
         </div>
       </div>
     </v-card-title>

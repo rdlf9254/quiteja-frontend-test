@@ -11,7 +11,7 @@
     <confirm-modal
       v-if="selectedUser"
       :show="isDeleteConfirmVisible"
-      :message="`Você tem certeza que deseja excluir o usuário ${selectedUser.firstName}?`"
+      :message="`Você tem certeza que deseja excluir o usuário ${selectedUser?.firstName}?`"
       confirm-text="Excluir"
       confirm-color="red darken-1"
       @close="closeDeleteModal"
@@ -49,10 +49,9 @@
       <div v-if="viewMode === 'list'">
         <v-data-table
           :headers="headers"
-          :items="processedUsers"
+          :items="filteredUsers"
           :items-per-page="10"
           class="elevation-1"
-          :search="search"
         >
           <template
             slot="item.picture"
@@ -139,19 +138,18 @@ export default {
     processedUsers() {
       return this.users.map(user => ({
         ...user,
-        fullName: `${user.title ? user.title.charAt(0).toUpperCase() + user.title.slice(1) + ". " : ""}${
-          user.firstName
-        } ${user.lastName}`,
+        fullName: `${user?.title ? user?.title?.charAt(0).toUpperCase() + user?.title?.slice(1) + ". " : ""}${
+          user?.firstName
+        } ${user?.lastName}`,
       }));
     },
     filteredUsers() {
-      if (!this.search) return this.users;
+      if (!this.search) return this.processedUsers;
 
-      const searchTerm = this.search.toLowerCase();
-      return this.users.filter(user => {
-        const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-        const email = user.email.toLowerCase();
-        return fullName.includes(searchTerm) || email.includes(searchTerm);
+      const searchTerm = this.search?.toLowerCase();
+      return this.processedUsers.filter(user => {
+        const fullName = user?.fullName?.toLowerCase();
+        return fullName?.includes(searchTerm);
       });
     },
   },
