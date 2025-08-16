@@ -2,9 +2,20 @@
   <v-app>
     <v-main>
       <router-view></router-view>
+      <the-toastr />
     </v-main>
   </v-app>
 </template>
+
+<script>
+import TheToastr from '@/components/shared/TheToastr.vue';
+
+export default {
+  components: {
+    TheToastr,
+  },
+};
+</script>
 
 <style lang="scss">
 #app {

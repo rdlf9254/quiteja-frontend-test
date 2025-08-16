@@ -57,9 +57,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import UserFormModal from './UserFormModal.vue';
 import ConfirmModal from '@/components/shared/ConfirmModal.vue';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'UserList',
@@ -86,6 +86,7 @@ export default {
   },
   methods: {
     ...mapActions('users', ['deleteUser', 'updateUser']),
+    ...mapActions('toastr', ['showToastr']),
 
     openEditModal(user) {
       this.selectedUser = user;
@@ -96,6 +97,7 @@ export default {
     },
     handleSave(userData) {
       this.updateUser({ id: userData.id, userData });
+      this.showToastr({ text: 'Usuário atualizado com sucesso', color: 'success' });
       this.closeEditModal();
     },
 
@@ -108,6 +110,7 @@ export default {
     },
     handleDelete() {
       this.deleteUser(this.selectedUser.id);
+      this.showToastr({ text: 'Usuário excluído com sucesso', color: 'success' });
       this.closeDeleteModal();
     },
   },
