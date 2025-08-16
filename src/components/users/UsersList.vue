@@ -52,6 +52,14 @@
           :items="filteredUsers"
           :items-per-page="10"
           class="elevation-1"
+          :footer-props="{
+            'items-per-page-text': 'Itens por página:',
+            'items-per-page-options': [5, 10, 25, 50],
+            'items-per-page-all-text': 'Todos',
+            'page-text': '{0}-{1} de {2}',
+            'prev-icon': 'mdi-chevron-left',
+            'next-icon': 'mdi-chevron-right'
+          }"
         >
           <template
             slot="item.picture"
