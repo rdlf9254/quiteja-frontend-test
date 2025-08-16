@@ -17,6 +17,7 @@
       @close="closeDeleteModal"
       @confirm="handleDelete"
     ></confirm-modal>
+
     <v-card-title>
       Usuários
       <v-spacer></v-spacer>
