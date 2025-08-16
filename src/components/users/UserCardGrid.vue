@@ -36,7 +36,7 @@ export default {
       return this.users.map(user => ({
         ...user,
         fullName: `${user.title ? user.title.charAt(0).toUpperCase() + user.title.slice(1) + '. ' : ''}${user.firstName} ${user.lastName}`,
-        displayName: `${user.firstName} ${user.lastName}`,
+        displayName: `${user.title ? user.title.charAt(0).toUpperCase() + user.title.slice(1) + '. ' : ''}${user.firstName} ${user.lastName}`,
       }));
     },
   },
