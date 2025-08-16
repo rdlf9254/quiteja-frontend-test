@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1 class="mb-4">Lista de Usuários</h1>
+    <users-banner />
 
     <div v-if="isLoading" class="text-center">
       <v-progress-circular
@@ -23,11 +23,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserList from '@/components/users/UsersList.vue';
+import UsersBanner from '@/components/users/UsersBanner.vue';
 
 export default {
   name: 'UsersView',
   components: {
     UserList,
+    UsersBanner,
   },
   computed: {
     ...mapGetters('users', ['allUsers', 'isLoading', 'error']),
