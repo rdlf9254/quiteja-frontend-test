@@ -1,13 +1,26 @@
 <template>
-  <v-card class="d-flex flex-column" height="100%" elevation="3" hover>
+  <v-card
+    class="d-flex flex-column"
+    height="100%"
+    elevation="3"
+    hover
+  >
     <v-card-title class="d-flex flex-column align-center pa-4">
-      <v-avatar size="80" class="mb-3" color="primary">
-        <v-img 
-          v-if="user.picture" 
-          :src="user.picture" 
+      <v-avatar
+        size="80"
+        class="mb-3"
+        color="primary"
+      >
+        <v-img
+          v-if="user.picture"
+          :src="user.picture"
           :alt="user.displayName || user.firstName"
         />
-        <v-icon v-else large color="white">
+        <v-icon
+          v-else
+          large
+          color="white"
+        >
           mdi-account
         </v-icon>
       </v-avatar>
@@ -22,28 +35,27 @@
 
     <v-card-actions class="pa-4">
       <v-spacer></v-spacer>
-      <v-btn 
-        icon 
-        color="primary" 
+      <v-icon
+        small
         @click="$emit('edit', user)"
-        class="mr-2"
+        class="mr-2 cursor-pointer"
       >
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-      <v-btn 
-        icon 
-        color="error" 
+        mdi-pencil
+      </v-icon>
+      <v-icon
+        small
         @click="$emit('delete', user)"
+        class="cursor-pointer"
       >
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
+        mdi-delete
+      </v-icon>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 export default {
-  name: 'UserCard',
+  name: "UserCard",
   props: {
     user: {
       type: Object,
