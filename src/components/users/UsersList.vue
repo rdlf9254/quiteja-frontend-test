@@ -1,8 +1,24 @@
 <template>
+  <div>
+    <user-form-modal
+      v-if="selectedUser"
+      :show="isEditModalVisible"
+      :user="selectedUser"
+      @close="closeEditModal"
+      @save="handleSave"
+    ></user-form-modal>
+
+    <confirm-modal
+      v-if="selectedUser"
+      :show="isDeleteConfirmVisible"
+      :message="`Você tem certeza que deseja excluir o usuário ${selectedUser.firstName}?`"
+      confirm-text="Excluir"
+      confirm-color="red darken-1"
+      @close="closeDeleteModal"
+      @confirm="handleDelete"
+    ></confirm-modal>
+    
     <v-card>
-      <v-card-title>
-        Usuários Cadastrados
-      </v-card-title>
       <v-data-table
         :headers="headers"
         :items="users"
@@ -11,52 +27,81 @@
       >
         <template slot="item.picture" slot-scope="{ item }">
           <v-avatar size="36px" class="my-2">
-            <img :src="item.picture" :alt="item.firstName">
+            <img :src="item.picture" :alt="item.firstName" />
           </v-avatar>
         </template>
-  
         <template slot="item.fullName" slot-scope="{ item }">
           {{ item.title | capitalize }}. {{ item.firstName }} {{ item.lastName }}
         </template>
-  
-         <template slot="item.actions">
-          <v-icon small class="mr-2">
-            mdi-pencil
-          </v-icon>
-          <v-icon small>
-            mdi-delete
-          </v-icon>
+
+        <template slot="item.actions" slot-scope="{ item }">
+          <v-icon small class="mr-2" @click="openEditModal(item)">mdi-pencil</v-icon>
+          <v-icon small @click="openDeleteModal(item)">mdi-delete</v-icon>
         </template>
-  
       </v-data-table>
     </v-card>
-  </template>
-  
-  <script>
-  export default {
-    name: 'UserList',
-    props: {
-      users: {
-        type: Array,
-        required: true,
-      },
+  </div>
+</template>
+
+<script>
+import { mapActions } from 'vuex';
+import UserFormModal from './UserFormModal.vue';
+import ConfirmModal from '@/components/shared/ConfirmModal.vue';
+
+export default {
+  name: 'UserList',
+  components: {
+    UserFormModal,
+    ConfirmModal,
+  },
+  props: {
+    users: { type: Array, required: true },
+  },
+  data() {
+    return {
+      isEditModalVisible: false,
+      isDeleteConfirmVisible: false,
+      selectedUser: null,
+      headers: [
+        { text: 'Foto', value: 'picture', sortable: false },
+        { text: 'Nome Completo', value: 'fullName' },
+        { text: 'Email', value: 'email' },
+        { text: 'Ações', value: 'actions', sortable: false },
+      ],
+    };
+  },
+  methods: {
+    ...mapActions('users', ['deleteUser', 'updateUser']),
+
+    openEditModal(user) {
+      this.selectedUser = user;
+      this.isEditModalVisible = true;
     },
-    data() {
-      return {
-        headers: [
-          { text: 'Foto', value: 'picture', sortable: false },
-          { text: 'Nome Completo', value: 'fullName' },
-          { text: 'Email', value: 'email' },
-          { text: 'Ações', value: 'actions', sortable: false },
-        ],
-      };
+    closeEditModal() {
+      this.isEditModalVisible = false;
     },
-    filters: {
-      capitalize(value) {
-        if (!value) return '';
-        value = value.toString();
-        return value.charAt(0).toUpperCase() + value.slice(1);
-      }
-    }
-  };
-  </script>
+    handleSave(userData) {
+      this.updateUser({ id: userData.id, userData });
+      this.closeEditModal();
+    },
+
+    openDeleteModal(user) {
+      this.selectedUser = user;
+      this.isDeleteConfirmVisible = true;
+    },
+    closeDeleteModal() {
+      this.isDeleteConfirmVisible = false;
+    },
+    handleDelete() {
+      this.deleteUser(this.selectedUser.id);
+      this.closeDeleteModal();
+    },
+  },
+  filters: {
+    capitalize(value) {
+      if (!value) return '';
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+  },
+};
+</script>
