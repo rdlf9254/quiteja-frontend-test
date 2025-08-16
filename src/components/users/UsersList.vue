@@ -60,11 +60,20 @@
             <v-avatar
               size="36px"
               class="my-2"
+              color="primary"
             >
-              <img
+              <v-img
+                v-if="item.picture"
                 :src="item.picture"
                 :alt="item.firstName"
               />
+              <v-icon
+                v-else
+                small
+                color="white"
+              >
+                mdi-account
+              </v-icon>
             </v-avatar>
           </template>
           <template

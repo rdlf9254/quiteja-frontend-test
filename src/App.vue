@@ -14,9 +14,6 @@ export default {
   components: {
     TheToastr,
   },
-  mounted() {
-    console.log(this.$vuetify);
-  },
 };
 </script>
 

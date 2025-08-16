@@ -2,7 +2,7 @@
   <v-container>
     <users-banner />
 
-    <div v-if="true" class="loading-container">
+    <div v-if="isLoading" class="loading-container">
       <v-card class="loading-card pa-8" elevation="4">
         <div class="text-center">
           <v-progress-circular
