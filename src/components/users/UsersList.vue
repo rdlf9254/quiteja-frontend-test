@@ -19,15 +19,15 @@
     ></confirm-modal>
 
     <v-card-title>
-      Usuários
-      <v-spacer></v-spacer>
-      <v-text-field
+      <!-- Usuários -->
+      <!-- <v-spacer></v-spacer> -->
+      <!-- <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         label="Pesquisar"
         single-line
         hide-details
-      ></v-text-field>
+      ></v-text-field> -->
 
       <v-btn-toggle v-model="viewMode" mandatory dense borderless>
         <v-btn value="list">
