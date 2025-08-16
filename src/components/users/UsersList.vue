@@ -20,16 +20,22 @@
 
     <v-card-title>
       <!-- Usuários -->
-      <!-- <v-spacer></v-spacer> -->
-      <!-- <v-text-field
+      <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         label="Pesquisar"
         single-line
         hide-details
-      ></v-text-field> -->
+        clearable
+      ></v-text-field>
+      <v-spacer></v-spacer>
 
-      <v-btn-toggle v-model="viewMode" mandatory dense borderless>
+      <v-btn-toggle
+        v-model="viewMode"
+        mandatory
+        dense
+        borderless
+      >
         <v-btn value="list">
           <v-icon>mdi-view-list</v-icon>
         </v-btn>
@@ -43,30 +49,54 @@
       <div v-if="viewMode === 'list'">
         <v-data-table
           :headers="headers"
-          :items="users"
+          :items="processedUsers"
           :items-per-page="10"
           class="elevation-1"
           :search="search"
         >
-          <template slot="item.picture" slot-scope="{ item }">
-            <v-avatar size="36px" class="my-2">
-              <img :src="item.picture" :alt="item.firstName" />
+          <template
+            slot="item.picture"
+            slot-scope="{ item }"
+          >
+            <v-avatar
+              size="36px"
+              class="my-2"
+            >
+              <img
+                :src="item.picture"
+                :alt="item.firstName"
+              />
             </v-avatar>
           </template>
-          <template slot="item.fullName" slot-scope="{ item }">
-            {{ item.title | capitalize }}. {{ item.firstName }} {{ item.lastName }}
+          <template
+            slot="item.fullName"
+            slot-scope="{ item }"
+          >
+            {{ item.fullName }}
           </template>
-  
-          <template slot="item.actions" slot-scope="{ item }">
-            <v-icon small class="mr-2" @click="openEditModal(item)">mdi-pencil</v-icon>
-            <v-icon small @click="openDeleteModal(item)">mdi-delete</v-icon>
+
+          <template
+            slot="item.actions"
+            slot-scope="{ item }"
+          >
+            <v-icon
+              small
+              class="mr-2"
+              @click="openEditModal(item)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon
+              small
+              @click="openDeleteModal(item)"
+              >mdi-delete</v-icon
+            >
           </template>
         </v-data-table>
       </div>
 
       <v-card-text v-else-if="viewMode === 'card'">
-         <user-card-grid 
-          :users="users"
+        <user-card-grid
+          :users="filteredUsers"
           @edit="openEditModal"
           @delete="openDeleteModal"
         ></user-card-grid>
@@ -76,13 +106,13 @@
 </template>
 
 <script>
-import UserFormModal from './UserFormModal.vue';
-import ConfirmModal from '@/components/shared/ConfirmModal.vue';
-import UserCardGrid from './UserCardGrid.vue';
-import { mapActions } from 'vuex';
+import UserFormModal from "./UserFormModal.vue";
+import ConfirmModal from "@/components/shared/ConfirmModal.vue";
+import UserCardGrid from "./UserCardGrid.vue";
+import { mapActions } from "vuex";
 
 export default {
-  name: 'UserList',
+  name: "UserList",
   components: {
     UserFormModal,
     ConfirmModal,
@@ -93,22 +123,41 @@ export default {
   },
   data() {
     return {
-      search: '',
+      search: "",
       isEditModalVisible: false,
       isDeleteConfirmVisible: false,
       selectedUser: null,
-      viewMode: 'list',
+      viewMode: "list",
       headers: [
-        { text: 'Foto', value: 'picture', sortable: false },
-        { text: 'Nome Completo', value: 'fullName' },
-        { text: 'Email', value: 'email' },
-        { text: 'Ações', value: 'actions', sortable: false },
+        { text: "Foto", value: "picture", sortable: false },
+        { text: "Nome Completo", value: "fullName" },
+        { text: "Ações", value: "actions", sortable: false },
       ],
     };
   },
+  computed: {
+    processedUsers() {
+      return this.users.map(user => ({
+        ...user,
+        fullName: `${user.title ? user.title.charAt(0).toUpperCase() + user.title.slice(1) + ". " : ""}${
+          user.firstName
+        } ${user.lastName}`,
+      }));
+    },
+    filteredUsers() {
+      if (!this.search) return this.users;
+
+      const searchTerm = this.search.toLowerCase();
+      return this.users.filter(user => {
+        const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        const email = user.email.toLowerCase();
+        return fullName.includes(searchTerm) || email.includes(searchTerm);
+      });
+    },
+  },
   methods: {
-    ...mapActions('users', ['deleteUser', 'updateUser']),
-    ...mapActions('toastr', ['showToastr']),
+    ...mapActions("users", ["deleteUser", "updateUser"]),
+    ...mapActions("toastr", ["showToastr"]),
 
     openEditModal(user) {
       this.selectedUser = user;
@@ -119,7 +168,7 @@ export default {
     },
     handleSave(userData) {
       this.updateUser({ id: userData.id, userData });
-      this.showToastr({ text: 'Usuário atualizado com sucesso', color: 'success' });
+      this.showToastr({ text: "Usuário atualizado com sucesso", color: "success" });
       this.closeEditModal();
     },
 
@@ -132,14 +181,8 @@ export default {
     },
     handleDelete() {
       this.deleteUser(this.selectedUser.id);
-      this.showToastr({ text: 'Usuário excluído com sucesso', color: 'success' });
+      this.showToastr({ text: "Usuário excluído com sucesso", color: "success" });
       this.closeDeleteModal();
-    },
-  },
-  filters: {
-    capitalize(value) {
-      if (!value) return '';
-      return value.charAt(0).toUpperCase() + value.slice(1);
     },
   },
 };
