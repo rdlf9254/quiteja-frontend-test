@@ -22,7 +22,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import UserList from '@/components/users/UserList.vue';
+import UserList from '@/components/users/UsersList.vue';
 
 export default {
   name: 'UsersView',
